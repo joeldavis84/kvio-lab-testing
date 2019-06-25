@@ -1,0 +1,45 @@
+---
+- hosts: all
+#  gather_facts: False
+  remote_user: centos
+  tasks:
+  - name: (LAB 2) Create Storage-related Objects for HostPath provisiong
+    shell: kubectl apply -f https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/storage-setup.yml
+  - name: (LAB 2) Create CDI Controller
+    shell: kubectl apply -f https://github.com/kubevirt/containerized-data-importer/releases/download/v1.9.0/cdi-controller.yaml
+  - name: (LAB 2) Wait for the CDI deployment to switch to a Running state
+    register: schedule_status
+    shell: kubectl get pods -n cdi -l app=containerized-data-importer -o json | jq -r .items[0].status.phase
+    until: schedule_status.stdout == "Running"
+    retries: 20
+  - name: (LAB 2) Give CDI deployment time to finish
+    pause:
+      seconds: 30
+  - name: (LAB 2) Create Fedora PVC
+    shell: kubectl apply -f https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/pvc_fedora.yml
+  - name: (LAB 2) Wait for Fedora PVC to be bound
+    register: fedora_status
+    shell: kubectl get pvc fedora -o json | jq -r .status.phase
+    until: fedora_status.stdout == "Bound"
+    retries: 10
+  - name: (LAB 2) Generate SSH Key
+    shell: ssh-keygen -f /home/centos/.ssh/id_rsa -t rsa -N ''
+  - name: (LAB 2) Download vm1 VirtualMachine YAML
+    shell: wget https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/vm1_pvc.yml -O /tmp/vm1_pvc.yml
+  - name: (LAB 2) Add k8s Instance-specific SSH key to vm1 VirtualMachine YAML
+    shell: sed -i "s%ssh-rsa.*%$(cat ~/.ssh/id_rsa.pub)%" /tmp/vm1_pvc.yml
+  - name: (LAB 2) Create vm1 VirtualMachine object
+    shell: kubectl create -f /tmp/vm1_pvc.yml
+  - name: (LAB 2) Wait for vm1 to be in a Running State
+    register: vm1_status 
+    shell: kubectl get vmi vm1 -o json | jq -r .status.phase
+    until: vm1_status.stdout == "Running"
+    retries: 20
+  - name: (LAB 2) Get IP Address for vm1
+    register: vm1_ip
+    shell: kubectl get pods -o json | jq -r .items[0].status.podIP
+  - name: (LAB 2) Testing SSH Access To vm1
+    shell: "ssh -o StrictHostKeyChecking=no fedora@{{ vm1_ip.stdout }} uptime"
+    retries: 50
+    register: result
+    until: result.rc == 0
