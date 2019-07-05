@@ -21,7 +21,14 @@
     register: fedora_status
     shell: kubectl get pvc fedora -o json | jq -r .status.phase
     until: fedora_status.stdout == "Bound"
+    delay: 10
     retries: 10
+  - name: (LAB 2) Wait For Data Importer Process to Finish
+    register: import_status
+    shell: kubectl get pods -l app=containerized-data-importer -o json | jq .items
+    until: import_status.stdout == "[]"
+    delay: 10
+    retries: 50
   - name: (LAB 2) Generate SSH Key
     shell: ssh-keygen -f /home/centos/.ssh/id_rsa -t rsa -N ''
   - name: (LAB 2) Download vm1 VirtualMachine YAML
