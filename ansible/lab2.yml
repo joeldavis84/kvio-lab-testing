@@ -40,6 +40,7 @@
     shell: kubectl get pods -o json | jq -r .items[0].status.podIP
   - name: (LAB 2) Testing SSH Access To vm1
     shell: "ssh -o StrictHostKeyChecking=no fedora@{{ vm1_ip.stdout }} uptime"
+    delay: 10
     retries: 50
     register: result
     until: result.rc == 0
