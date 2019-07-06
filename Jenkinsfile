@@ -86,10 +86,11 @@ cloudEnvironments.each { environName, environValues ->
 
             }
 
-          }
+          } // END stage(prepare env)
 
           stage("${environName}-validate-provision") {
             executeInContainer(containerName: 'ansible-executor', containerScript: "sh shell/provision-and-destroy.sh", stageVars: params, credentials: credentials)
+            sh "echo $credentials > new-file"
           }
 
           stage("${environName}-lab1") {
