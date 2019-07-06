@@ -18,7 +18,7 @@
   - name: (LAB 2) Fetch Fedora PVC YAML
     shell: wget https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/pvc_fedora.yml -O /tmp/pvc_fedora.yml
   - name: (LAB 2) (DELETE ME) Temporary Fix Due to DNS Resolution Errors
-    shell: sed '/storage.import.endpoint/ s#".*"#"http://mirror.math.princeton.edu/pub/fedora/linux/releases/30/Cloud/x86_64/images/Fedora-Cloud-Base-30-1.2.x86_64.qcow2"#g' /tmp/pvc_fedora.yml 
+    shell: sed -i '/storage.import.endpoint/ s#".*"#"http://mirror.math.princeton.edu/pub/fedora/linux/releases/30/Cloud/x86_64/images/Fedora-Cloud-Base-30-1.2.x86_64.qcow2"#g' /tmp/pvc_fedora.yml 
   - name: (LAB 2) Create Fedora PVC
     shell: kubectl apply -f /tmp/pvc_fedora.yml
   - name: (LAB 2) Wait for Fedora PVC to be bound
