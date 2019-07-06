@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+#########################################
+### Global Vars and Utility Functions
+#########################################
+
+  ## This disables a warning about something that's intended behavior (not having inventory for provisioning and cleanup
+export ANSIBLE_LOCALHOST_WARNING="False"
+
   ## Default to running lab1 tests
 if [[ -z "$1" ]]; then
 
@@ -17,6 +24,12 @@ failImmediately(){
     exit $1
   fi
 }
+
+
+#########################################
+### Main Logic
+#########################################
+
 echo '-----------------------'
 echo "Beginning Test for ${labName} on ${targetEnvironment}"
 echo '-----------------------'
