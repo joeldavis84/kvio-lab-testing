@@ -11,6 +11,12 @@ else
 
 fi
 
+failImmediately(){
+  if [[ $1 -ne 0 ]]; then
+    echo "Ansible Playbook Failed with: $1" >&1
+    exit $1
+  fi
+}
 echo '-----------------------'
 echo "Beginning Test for ${labName} on ${targetEnvironment}"
 echo '-----------------------'
@@ -23,6 +29,12 @@ if [[ "x${targetEnvironment}" != "xaws" ]] && [[ "x${targetEnvironment}" != "xgc
 
 fi
 
-ansible-playbook ansible/${targetEnvironment}-provision.yml || exit 1
-ansible-playbook --private-key ${SSH_KEY_LOCATION} -i /tmp/inventory ansible/${labName}.yml || exit 1
-ansible-playbook ansible/${targetEnvironment}-cleanup.yml || exit 1
+set -o pipefail
+ansible-playbook ansible/${targetEnvironment}-provision.yml | tee ansible-${targetEnvironment}-${labName}-provision.log
+failImmediately $?
+
+ansible-playbook --private-key ${SSH_KEY_LOCATION} -i /tmp/inventory ansible/${labName}.yml | tee ansible-${targetEnvironment}-${labName}.log
+failImmediately $?
+
+ansible-playbook ansible/${targetEnvironment}-cleanup.yml | tee ansible-${targetEnvironment}-${labName}-cleanup.log
+failImmediately $?

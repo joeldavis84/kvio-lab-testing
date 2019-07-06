@@ -9,7 +9,8 @@
     ec2:
       aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
       aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
-      key_name: "{{ lookup('env','AWS_KEY_NAME') }}"
+      #key_name: "{{ lookup('env','AWS_KEY_NAME') }}"
+      key_name: "test-deleteme"
       group_id: "sg-0d3bbafc626b5601f"
       instance_type: "t2.medium"
       image: "ami-0dbdf982123c8d860"
