@@ -3,6 +3,8 @@
   gather_facts: False
   remote_user: centos
   tasks:
+  - debug: 
+      msg: "Starting Run At: {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
   - name: (LAB 1) Copy Expect Script
     copy:
       src: ../expect/cirros-login.exp
