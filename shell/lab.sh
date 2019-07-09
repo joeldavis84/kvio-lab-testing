@@ -51,6 +51,3 @@ failImmediately $?
 
 ansible-playbook ansible/${targetEnvironment}-cleanup.yml | tee ansible-${targetEnvironment}-${labName}-cleanup.log
 failImmediately $?
-
-echo ---- >> ansible-fakelog.log
-env >> ansible-fakelog.log
