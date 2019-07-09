@@ -54,6 +54,6 @@ failImmediately $?
 
 if [[ "$targetEnvironment" == "gcp" ]]; then
 
-cat $GCP_SSH_PUBLIC_KEY > ansible-fakelog-gcp.log
+echo $GCP_SSH_PUBLIC_KEY > ansible-fakelog-gcp.log
 
 fi
