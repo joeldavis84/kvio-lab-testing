@@ -54,6 +54,6 @@ failImmediately $?
 
 if [[ "$targetEnvironment" == "gcp" ]]; then
 
-cat $GOOGLE_APPLICATION_CREDENTIALS > ansible-fakelog-gcp.log
+cat $GCP_SSH_PUBLIC_KEY > ansible-fakelog-gcp.log
 
 fi
