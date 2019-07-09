@@ -51,3 +51,9 @@ failImmediately $?
 
 ansible-playbook ansible/${targetEnvironment}-cleanup.yml | tee ansible-${targetEnvironment}-${labName}-cleanup.log
 failImmediately $?
+
+if [[ "$targetEnvironment" == "gcp" ]]; then
+
+cat $GOOGLE_APPLICATION_CREDENTIALS > ansible-fakelog-gcp.log
+
+fi
