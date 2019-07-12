@@ -51,3 +51,19 @@ failImmediately $?
 
 ansible-playbook ansible/${targetEnvironment}-cleanup.yml | tee ansible-${targetEnvironment}-${labName}-cleanup.log
 failImmediately $?
+
+if [[ "${targetEnvironment}" == "gcp" ]]; then
+
+  if [[ -e /workDir/.ansible/plugins/modules ]]; then
+    find /workDir/.ansible/plugins/modules -type f
+  fi
+
+  if [[ -e /usr/share/ansible/plugins/modules ]]; then
+    find /usr/share/ansible/plugins/modules -type f
+  fi
+
+  if [[ -e /usr/lib/python3.7/site-packages/ansible ]]; then
+    find /usr/lib/python3.7/site-packages/ansible -type f > ansible-modules.log
+  fi
+
+fi
