@@ -23,7 +23,7 @@
       key_name: "{{ lookup('env','AWS_KEY_NAME') }}"
       group_id: "sg-0d3bbafc626b5601f"
       instance_type: "t2.medium"
-      image: "{{ recent_ami_id }}"
+      image: "{{ recent_ami_id[0] }}"
       state: "present"
       wait: true
       region: "us-west-1"
