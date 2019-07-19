@@ -4,17 +4,27 @@
   vars:
     build_id: "{{ lookup('env', 'buildID') }}"
   tasks:
+  - name: "Fetch AMI Feed"
+    get_url:
+      url: "https://jenkins-kubevirt.apps.ci.centos.org/job/dev/job/jodavis/job/kvio-lab-images/lastSuccessfulBuild/artifact/new-images.json"
+      dest: "./existing-ami.json"
+      mode: "0400"
+  - name: "Import JSON into variable"
+    set_fact:
+      recent_ami_json: "{{ lookup('file', 'existing-ami.json') | from_json }}"
+  - name: "Save AMI ID For Most Recent us-west-1 Image"
+    set_fact:
+      recent_ami_id: "{{ recent_ami_json | json_query(\"[?region=='us-west-1'].ami_id\") }}"
   - name: "Launch new instance on AWS"
-    register: ec2
+    register: "ec2"
     ec2:
       aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY_ID') }}"
       aws_secret_key: "{{ lookup('env','AWS_SECRET_ACCESS_KEY') }}"
-      #key_name: "{{ lookup('env','AWS_KEY_NAME') }}"
-      key_name: "test-deleteme"
+      key_name: "{{ lookup('env','AWS_KEY_NAME') }}"
       group_id: "sg-0d3bbafc626b5601f"
       instance_type: "t2.medium"
-      image: "ami-0dbdf982123c8d860"
-      state: present
+      image: "{{ recent_ami_id }}"
+      state: "present"
       wait: true
       region: "us-west-1"
       vpc_subnet_id: "subnet-06841259e5431c9ed"
@@ -25,16 +35,16 @@
   - name: "Write instance ID to /tmp/launched_instances"
     copy:
       content: '{{ ec2.instance_ids }}'
-      dest: /tmp/launched_instances
-    delegate_to: localhost
+      dest: "/tmp/launched_instances"
+    delegate_to: "localhost"
   - name: "Write instance IP to /tmp/inventory"
     copy:
       content: '{{ ec2.instances[0].public_ip }}'
-      dest: /tmp/inventory
-    delegate_to: localhost
+      dest: "/tmp/inventory"
+    delegate_to: "localhost"
   - name: "Wait for SSH to become available"
     wait_for:
       host: "{{ ec2.instances[0].public_ip }}"
       port: 22
       timeout: 620
-      state: started
+      state: "started"
