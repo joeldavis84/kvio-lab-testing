@@ -48,6 +48,10 @@
       port: 22
       timeout: 620
       state: "started"
-  - name: "Pause To Let Virt Containers Finish Startup"
-    pause:
-      minutes: 5
+  - name: "Block Until All Pods In The kubevirt Namespace Show Ready"
+    register: kubevirt_pod_status
+    shell: kubectl get pods -n kubevirt -o json | jq -r '.items[].status.conditions[] | select(.type=="Ready") .status' | uniq
+    until: kubevirt_pod_status.stdout == "Ready"
+    delegate_to: "{{ ec2.instances[0].public_ip }}"
+    retries: 20
+    delay: 2
