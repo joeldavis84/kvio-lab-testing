@@ -43,7 +43,7 @@ if [[ "x${targetEnvironment}" != "xaws" ]] && [[ "x${targetEnvironment}" != "xgc
 fi
 
 set -o pipefail
-ansible-playbook ansible/${targetEnvironment}-provision.yml | tee ansible-${targetEnvironment}-${labName}-provision.log
+ansible-playbook --private-key ${SSH_KEY_LOCATION} ansible/${targetEnvironment}-provision.yml | tee ansible-${targetEnvironment}-${labName}-provision.log
 failImmediately $?
 
 ansible-playbook --private-key ${SSH_KEY_LOCATION} -i /tmp/inventory ansible/${labName}.yml | tee ansible-${targetEnvironment}-${labName}.log

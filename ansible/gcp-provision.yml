@@ -33,11 +33,17 @@
       port: 22
       timeout: 620
       state: started
-  - name: "Block Until All Pods In The kubevirt Namespace Show Ready"
-    register: kubevirt_pod_status
-    shell: kubectl get pods -n kubevirt -o json | jq -r '.items[].status.conditions[] | select(.type=="Ready") .status' | uniq
-    until: kubevirt_pod_status.stdout == "Ready"
-    delegate_to: "{{ gce.instance_data[0].public_ip }}"
-    retries: 20
-    delay: 2
+  - name: "Give kubevirt Containers Time To Start"
+    pause:
+      minutes: 5
 
+###
+## TODO: Below is more ideal than an arbitrary wait but I couldn't get it to use the correct private key
+#
+#  - name: "Block Until All Pods In The kubevirt Namespace Show Ready"
+#    register: kubevirt_pod_status
+#    shell: kubectl get pods -n kubevirt -o json | jq -r '.items[].status.conditions[] | select(.type=="Ready") .status' | uniq
+#    until: kubevirt_pod_status.stdout == "Ready"
+#    delegate_to: "centos@{{ gce.instance_data[0].public_ip }}"
+#    retries: 20
+#    delay: 2
