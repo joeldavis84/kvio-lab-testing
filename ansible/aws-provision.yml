@@ -48,3 +48,6 @@
       port: 22
       timeout: 620
       state: "started"
+  - name: "Pause To Let Virt Containers Finish Startup"
+    pause:
+      minutes: 5
