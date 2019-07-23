@@ -8,18 +8,14 @@ echo '-----------------------'
 echo "Beginning Basic Provisioning Test on ${targetEnvironment}"
 echo '-----------------------'
 
-if [[ "x${targetEnvironment}" == "xaws" ]]; then
+echo $targetEnvironment | egrep '^(aws|gcp|minikube)' >/dev/null
 
-  ansible-playbook ansible/aws-provision.yml && ansible-playbook ansible/aws-cleanup.yml
-
-elif [[ "x${targetEnvironment}" == "xgcp" ]]; then
-
-  ansible-playbook ansible/gcp-provision.yml && ansible-playbook ansible/gcp-cleanup.yml
-
-else
+if [[ $? -ne 0 ]]; then
 
   echo "Unknown environment given: ${targetEnvironment}." >&2
   echo "Exiting with an error." >&2
   exit 1
 
 fi
+
+ansible-playbook ansible/${targetEnvironment}-provision.yml && ansible-playbook ansible/${targetEnvironment}-cleanup.yml

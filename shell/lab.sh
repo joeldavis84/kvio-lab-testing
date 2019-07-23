@@ -34,7 +34,9 @@ echo '-----------------------'
 echo "Beginning Test for ${labName} on ${targetEnvironment}"
 echo '-----------------------'
 
-if [[ "x${targetEnvironment}" != "xaws" ]] && [[ "x${targetEnvironment}" != "xgcp" ]]; then
+echo $targetEnvironment | egrep '^(aws|gcp|minikube)' >/dev/null
+
+if [[ $? -ne 0 ]]; then
 
   echo "Unknown environment given: ${targetEnvironment}." >&2
   echo "Exiting with an error." >&2
