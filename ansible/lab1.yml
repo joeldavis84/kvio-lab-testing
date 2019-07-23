@@ -6,6 +6,7 @@
   - debug: 
       msg: "Starting Run At: {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
   - name: (LAB 1) Copy Expect Script
+    become: "True"
     copy:
       src: ../expect/cirros-login.exp
       dest: /tmp/cirros-login.exp
