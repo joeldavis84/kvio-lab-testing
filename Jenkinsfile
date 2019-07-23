@@ -35,6 +35,11 @@ def cloudEnvironments = [
   'gcp': [
     'envFile': 'config/environment.gcp',
     'credentials': gcp_credentials
+  ],
+
+  'minikube': [
+    'envFile': 'config/environment.gcp',
+    'credentials': gcp_credentials
   ]
 ]
 
