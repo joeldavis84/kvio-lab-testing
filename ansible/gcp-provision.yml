@@ -21,7 +21,7 @@
       disk_size: 30
       metadata: '{"ssh-keys": "{{ user }}: {{ ssh_public_key }}"}'
       tags:
-        - kubeci
+        - kubevirtci
   - name: "Write instance IP to /tmp/inventory"
     copy:
       content: '{{ gce.instance_data[0].public_ip }}'
