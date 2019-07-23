@@ -69,3 +69,4 @@
     retries: 50
     register: result
     until: result.rc == 0
+    when: target_env != "minikube"
