@@ -19,6 +19,7 @@
       credentials_file: "{{ credentials_file }}"
       project_id: "cnvlab-209908"
       disk_size: 30
+      persistent_boot_disk: "True"
       metadata: '{"ssh-keys": "{{ user }}: {{ ssh_public_key }}"}'
       tags:
         - kubevirtci
