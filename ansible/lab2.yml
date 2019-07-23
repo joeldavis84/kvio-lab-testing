@@ -18,7 +18,9 @@
     pause:
       seconds: 30
   - name: (LAB 2) Fetch Fedora PVC YAML
-    shell: wget https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/pvc_fedora.yml -O /tmp/pvc_fedora.yml
+    get_url:
+      url: "https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/pvc_fedora.yml"
+      dest: "/tmp/pvc_fedora.yml"
   - name: (LAB 2) Create Fedora PVC
     shell: kubectl apply -f /tmp/pvc_fedora.yml
   - name: (LAB 2) Wait for Fedora PVC to be bound
@@ -36,7 +38,9 @@
   - name: (LAB 2) Generate SSH Key
     shell: ssh-keygen -f /home/centos/.ssh/id_rsa -t rsa -N ''
   - name: (LAB 2) Download vm1 VirtualMachine YAML
-    shell: wget https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/vm1_pvc.yml -O /tmp/vm1_pvc.yml
+    get_url:
+      url: "https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/vm1_pvc.yml"
+      dest: "/tmp/vm1_pvc.yml"
   - name: (LAB 2) Add k8s Instance-specific SSH key to vm1 VirtualMachine YAML
     shell: sed -i "s%ssh-rsa.*%$(cat ~/.ssh/id_rsa.pub)%" /tmp/vm1_pvc.yml
   - name: (LAB 2) Create vm1 VirtualMachine object
