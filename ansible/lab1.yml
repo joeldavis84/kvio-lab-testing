@@ -6,7 +6,7 @@
   - debug: 
       msg: "Starting Run At: {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
   - name: (LAB 1) Copy Expect Script
-    become: "True"
+    become: "yes"
     copy:
       src: ../expect/cirros-login.exp
       dest: /tmp/cirros-login.exp
@@ -14,7 +14,7 @@
       group: centos
       mode: '0600'
   - name: (LAB 1) Install Expect Interpreter
-    become: yes
+    become: "yes"
     yum:
       name: expect
       state: latest
