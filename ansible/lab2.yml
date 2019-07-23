@@ -9,7 +9,7 @@
     shell: kubectl apply -f https://raw.githubusercontent.com/kubevirt/kubevirt.github.io/master/labs/manifests/storage-setup.yml
   - name: "(LAB 2) Disable minikube-hostpath  Provisioner If It Exists"
     ignore_errors: "yes"
-    shell: kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+    shell: kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
   - name: (LAB 2) Create CDI Controller
     shell: kubectl apply -f https://github.com/kubevirt/containerized-data-importer/releases/download/v1.9.0/cdi-controller.yaml
   - name: (LAB 2) Wait for the CDI deployment to switch to a Running state
