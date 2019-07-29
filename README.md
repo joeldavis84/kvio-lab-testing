@@ -12,8 +12,8 @@ This repository contains tests for Kubevirt.io laboratories regarding the **try 
 The entry point is the Jenkinsfile which executes this pipeline:
 
 - `shell/provision-and-destroy.sh`: This script will execute 2 ansible playbooks in a row, the first one will bootstrap an image prebuilded by [this repo](https://github.com/joeldavis84/kvio-lab-images.git) which raise up a Kubevirt environment on a ${PROVIDER} and then when the kubevirt environments was up and running stops it and delete it. This test will ensure that the Images are working fine and could bootstrap a well formed Kubevirt environment. The ansible playbooks executed are these:
-    - ${PROVIDER}-provision.yml
-    - ${PROVIDER}-cleanup.yml
+    - `${PROVIDER}-provision.yml`
+    - `${PROVIDER}-cleanup.yml`
 
 - `sh shell/lab.sh labX`: `lab.sh` is a lab executor which accept a parameter with the `labX.yml` filename. This will wrap the lab results and the possible fails that could happen on the execution. This `labx.sh`:
     - Raises up an kubevirt enironment with `${PROVIDER}-provision.yml`.
@@ -25,9 +25,13 @@ The entry point is the Jenkinsfile which executes this pipeline:
 ## Results
 
 The test results are stored on the Jenkins environment as:
-    - ansible-${targetEnvironment}-${labName}-provision.log
-    - ansible-${targetEnvironment}-${labName}.log
-    - ansible-${targetEnvironment}-${labName}-cleanup.log
+    - `ansible-${targetEnvironment}-${labName}-provision.log`
+    - `ansible-${targetEnvironment}-${labName}.log`
+    - `ansible-${targetEnvironment}-${labName}-cleanup.log`
+
+
+- [Build/Test log Sample]9https://jenkins-kubevirt.apps.ci.centos.org/job/dev/job/jodavis/job/kvio-lab-testing/30/consoleFull)
+- [Builded artifacts](https://jenkins-kubevirt.apps.ci.centos.org/job/dev/job/jodavis/job/kvio-lab-testing/lastSuccessfulBuild/artifact/), log separated by ${PROVIDER}.
 
 ## TO-DO
 
